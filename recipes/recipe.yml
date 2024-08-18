@@ -25,16 +25,14 @@ modules:
       # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
   - type: shell
     commands:
-    - type: shell
-  commands:
-    # Create the user
-    - useradd -m -d /var/home/cagenix -s /bin/bash cagenix
+      # Create the user
+      - useradd -m -d /var/home/cagenix -s /bin/bash cagenix
 
-    # Create the necessary directories for Hyprland configuration
-    - mkdir -p /var/home/cagenix/.config/hypr
+      # Create the necessary directories for Hyprland configuration
+      - mkdir -p /var/home/cagenix/.config/hypr
 
-    # Set ownership of the home directory to the new user
-    - chown -R cagenix:cagenix /var/home/cagenix
+      # Set ownership of the home directory to the new user
+      - chown -R cagenix:cagenix /var/home/cagenix
 
   - type: files
     files:
