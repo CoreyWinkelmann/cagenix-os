@@ -15,17 +15,44 @@ modules:
         destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
 
   - type: rpm-ostree
-    repos:
-      # - https://copr.fedorainfracloud.org/coprs/atim/starship/repo/fedora-%OS_VERSION%/atim-starship-fedora-%OS_VERSION%.repo
     install:
       - xclip
-      # - micro
-      # - starship
+      - hyprland  # Add Hyprland to the list of installed packages
     remove:
       # example: removing firefox (in favor of the flatpak)
       # "firefox" is the main package, "firefox-langpacks" is a dependency
       # - firefox
       # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+
+  - type: files
+    files:
+      - path: /usr/share/wayland-sessions/hyprland.desktop
+        content: |
+          [Desktop Entry]
+          Name=Hyprland
+          Comment=Wayland compositor
+          Exec=Hyprland
+          Type=Application
+          DesktopNames=Hyprland
+
+      - path: ~/.config/hypr/hyprland.conf
+        content: |
+          monitor=,preferred,auto
+          exec=~/.config/hypr/autostart.sh
+
+      - path: ~/.config/hypr/autostart.sh
+        content: |
+          #!/bin/bash
+          # Start background
+          swaybg -i /usr/share/backgrounds/default-dark.png &
+          
+          # Start compositor effects
+          hyprctl dispatch dpms on
+          
+          # Start other apps
+          waybar &
+          nm-applet &
+        mode: '0755'
 
   - type: default-flatpaks
     notify: true # Send notification after install/uninstall is finished (true/false)
@@ -45,4 +72,3 @@ modules:
       # - org.gnome.eog
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
-
