@@ -35,24 +35,25 @@ modules:
           Type=Application
           DesktopNames=Hyprland
 
-      - path: ~/.config/hypr/hyprland.conf
+      - path: /root/.config/hypr/hyprland.conf
         content: |
           monitor=,preferred,auto
-          exec=~/.config/hypr/autostart.sh
+          exec=/root/.config/hypr/autostart.sh
 
-      - path: ~/.config/hypr/autostart.sh
+      - path: /root/.config/hypr/autostart.sh
         content: |
           #!/bin/bash
           # Start background
           swaybg -i /usr/share/backgrounds/default-dark.png &
-          
+
           # Start compositor effects
           hyprctl dispatch dpms on
-          
+
           # Start other apps
           waybar &
           nm-applet &
         mode: '0755'
+
 
   - type: default-flatpaks
     notify: true # Send notification after install/uninstall is finished (true/false)
