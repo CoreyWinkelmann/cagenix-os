@@ -23,6 +23,9 @@ modules:
       # "firefox" is the main package, "firefox-langpacks" is a dependency
       # - firefox
       # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+  - type: shell
+    commands:
+      - mkdir -p /var/home/cagenix/.config/hypr
 
   - type: files
     files:
@@ -35,12 +38,12 @@ modules:
           Type=Application
           DesktopNames=Hyprland
 
-      - path: /root/.config/hypr/hyprland.conf
+      - path: /var/home/cagenix/.config/hypr/hyprland.conf
         content: |
           monitor=,preferred,auto
-          exec=/root/.config/hypr/autostart.sh
+          exec=/var/home/cagenix/.config/hypr/autostart.sh
 
-      - path: /root/.config/hypr/autostart.sh
+      - path: /var/home/cagenix/.config/hypr/autostart.sh
         content: |
           #!/bin/bash
           # Start background
@@ -53,7 +56,6 @@ modules:
           waybar &
           nm-applet &
         mode: '0755'
-
 
   - type: default-flatpaks
     notify: true # Send notification after install/uninstall is finished (true/false)
