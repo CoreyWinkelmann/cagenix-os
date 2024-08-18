@@ -23,39 +23,36 @@ modules:
       # "firefox" is the main package, "firefox-langpacks" is a dependency
       # - firefox
       # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-  - type: shell
-    commands:
-      - mkdir -p /var/home/cagenix/.config/hypr
+  # - type: script
+  #   snippets:
+  #     - |
+  #       mkdir -p /usr/share/wayland-sessions
+  #       mkdir -p /var/home/cagenix/.config/hypr
 
-  - type: files
-    files:
-      - path: /usr/share/wayland-sessions/hyprland.desktop
-        content: |
-          [Desktop Entry]
-          Name=Hyprland
-          Comment=Wayland compositor
-          Exec=Hyprland
-          Type=Application
-          DesktopNames=Hyprland
+  # - type: script
+  #   snippets:
+  #     - |
+  #       echo '[Desktop Entry]
+  #       Name=Hyprland
+  #       Comment=Wayland compositor
+  #       Exec=Hyprland
+  #       Type=Application
+  #       DesktopNames=Hyprland' > /usr/share/wayland-sessions/hyprland.desktop
+  #     - |
+  #       echo 'monitor=,preferred,auto
+  #       exec=/var/home/cagenix/.config/hypr/autostart.sh' > /var/home/cagenix/.config/hypr/hyprland.conf
+  #     - |
+  #       echo '#!/bin/bash
+  #       # Start background
+  #       swaybg -i /usr/share/backgrounds/default-dark.png &
 
-      - path: /var/home/cagenix/.config/hypr/hyprland.conf
-        content: |
-          monitor=,preferred,auto
-          exec=/var/home/cagenix/.config/hypr/autostart.sh
+  #       # Start compositor effects
+  #       hyprctl dispatch dpms on
 
-      - path: /var/home/cagenix/.config/hypr/autostart.sh
-        content: |
-          #!/bin/bash
-          # Start background
-          swaybg -i /usr/share/backgrounds/default-dark.png &
-
-          # Start compositor effects
-          hyprctl dispatch dpms on
-
-          # Start other apps
-          waybar &
-          nm-applet &
-        mode: '0755'
+  #       # Start other apps
+  #       waybar &
+  #       nm-applet &' > /var/home/cagenix/.config/hypr/autostart.sh
+  #       chmod 0755 /var/home/cagenix/.config/hypr/autostart.sh
 
   - type: default-flatpaks
     notify: true # Send notification after install/uninstall is finished (true/false)
