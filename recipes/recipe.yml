@@ -1,74 +1,20 @@
-# image will be published to ghcr.io/<user>/<name>
 name: cagenix-os
-# description will be included in the image's metadata
-description: This is my personal OS image.
+description: Cagenix OS
 
-base-image: ghcr.io/ublue-os/aurora-dx-asus-nvidia
+base-image: ghcr.io/ublue-os/base-asus-nvidia
 image-version: latest
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
 modules:
-  - type: files
-    files:
-      - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
+  - from-file: sddm-packages.yml
+  - from-file: common-packages.yml
+  - from-file: hyprland-packages.yml
+  - from-file: hyprland-files.yml
+  - from-file: common-files.yml
+  - from-file: common-scripts.yml
+  - from-file: hyprland-scripts.yml  
+  - from-file: sddm-scripts.yml
+  - type: signing
+  - from-file: sddm-systemd.yml
 
-  - type: rpm-ostree
-    install:
-      - xclip
-      - hyprland  # Add Hyprland to the list of installed packages
-    remove:
-      # example: removing firefox (in favor of the flatpak)
-      # "firefox" is the main package, "firefox-langpacks" is a dependency
-      # - firefox
-      # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-  # - type: script
-  #   snippets:
-  #     - |
-  #       mkdir -p /usr/share/wayland-sessions
-  #       mkdir -p /var/home/cagenix/.config/hypr
-
-  # - type: script
-  #   snippets:
-  #     - |
-  #       echo '[Desktop Entry]
-  #       Name=Hyprland
-  #       Comment=Wayland compositor
-  #       Exec=Hyprland
-  #       Type=Application
-  #       DesktopNames=Hyprland' > /usr/share/wayland-sessions/hyprland.desktop
-  #     - |
-  #       echo 'monitor=,preferred,auto
-  #       exec=/var/home/cagenix/.config/hypr/autostart.sh' > /var/home/cagenix/.config/hypr/hyprland.conf
-  #     - |
-  #       echo '#!/bin/bash
-  #       # Start background
-  #       swaybg -i /usr/share/backgrounds/default-dark.png &
-
-  #       # Start compositor effects
-  #       hyprctl dispatch dpms on
-
-  #       # Start other apps
-  #       waybar &
-  #       nm-applet &' > /var/home/cagenix/.config/hypr/autostart.sh
-  #       chmod 0755 /var/home/cagenix/.config/hypr/autostart.sh
-
-  - type: default-flatpaks
-    notify: true # Send notification after install/uninstall is finished (true/false)
-    system:
-      # If no repo information is specified, Flathub will be used by default
-      # repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      # repo-name: flathub
-      # repo-title: "Flathub (system-wide)" # Optional; this sets the remote's user-facing name in graphical frontends like GNOME Software
-      install:
-        # - org.mozilla.firefox
-        # - org.gnome.Loupe
-        # - one.ablaze.floorp//lightning # This is an example of flatpak which has multiple branches in selection (flatpak//branch).
-      # Flatpak runtimes are not supported (like org.winehq.Wine//stable-23.08),
-      # only normal flatpak applications are (like Floorp Lightning web browser in this example).
-      # Installing different branches of the same Flatpak is not supported.
-      remove:
-      # - org.gnome.eog
-
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
