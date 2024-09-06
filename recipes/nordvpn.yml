@@ -1,0 +1,7 @@
+type: rpm-ostree
+repos:
+  - https://repo.nordvpn.com/yum/nordvpn/centos
+keys:
+  - https://repo.nordvpn.com/gpg/nordvpn_public.asc
+install:
+  - nordvpn
