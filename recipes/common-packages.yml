@@ -23,7 +23,8 @@ install:
   - ddcutil
   - tlp
   - tlp-rdw
-  
+  - dialog
+
 # sound
   - wireplumber
   - pipewire
