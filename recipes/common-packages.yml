@@ -24,6 +24,8 @@ install:
   - tlp
   - tlp-rdw
   - dialog
+  - mokutil
+  - pesign
 
 # sound
   - wireplumber
