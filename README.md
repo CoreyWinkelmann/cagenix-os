@@ -55,3 +55,35 @@ These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](ht
 ```bash
 cosign verify --key cosign.pub ghcr.io/coreywinkelmann/cagenix-os
 ```
+
+## SecureBoot setup
+
+```bash
+openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=CagenixOS Kernel Module Signing/"
+sudo mokutil --import MOK.der
+```
+
+Reboot and Enroll the Key: After the previous step, reboot your system. During the boot process, you will see the MOK Manager screen.
+
+    Select "Enroll MOK".
+    Choose "Continue" and confirm.
+    Enter the password you set earlier when prompted.
+
+```bash
+sudo /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 MOK.priv MOK.der $(modinfo -n nvidia)
+```
+### Create Boot script
+
+Create file `/usr/local/bin/sign-nvidia-modules.sh`
+
+```bash
+#!/bin/bash
+for module in $(find /lib/modules/$(uname -r)/extra/nvidia* -type f -name '*.ko'); do
+    /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /root/MOK.priv /root/MOK.der $module
+done
+```
+
+```bash
+sudo chmod +x /usr/local/bin/sign-nvidia-modules.sh
+systemctl reboot
+```
